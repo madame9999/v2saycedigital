@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Code, Palette, Zap, Users, Star, Mail, Phone, MapPin, Menu, X, ChevronDown, Globe, Sparkles, TrendingUp, Eye, Clock, Shield, Check, Quote } from 'lucide-react';
+import { ArrowRight, Code, Palette, Zap, Users, Star, Mail, Phone, MapPin, Menu, X, ChevronDown, Globe, Sparkles, TrendingUp, Eye, Clock, Shield, Check, Quote, Gift } from 'lucide-react';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [showDiscount, setShowDiscount] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +31,11 @@ function App() {
       element.scrollIntoView({ behavior: 'smooth' });
       setIsMenuOpen(false);
     }
+  };
+
+  const generateDiscountCode = () => {
+    const codes = ['SAVE10WEB', 'DIGITAL10', 'EXCLUSIVE10', 'WEB10OFF', 'SAYCE10'];
+    return codes[Math.floor(Math.random() * codes.length)];
   };
 
   return (
@@ -62,10 +68,10 @@ function App() {
             
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
-                {['Accueil', 'Services', 'Témoignages', 'À propos'].map((item, index) => (
+                {['Accueil', 'Services', 'Témoignages', 'Offres'].map((item, index) => (
                   <button 
                     key={item}
-                    onClick={() => scrollToSection(item.toLowerCase().replace('à propos', 'apropos').replace('témoignages', 'portfolio'))} 
+                    onClick={() => scrollToSection(item.toLowerCase().replace('témoignages', 'portfolio').replace('offres', 'offers'))} 
                     className="relative text-slate-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-all duration-300 group"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
@@ -97,10 +103,10 @@ function App() {
         <div className={`md:hidden transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
           <div className="bg-white/95 backdrop-blur-xl border-t border-slate-200/50">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {['Accueil', 'Services', 'Témoignages', 'À propos', 'Contact'].map((item) => (
+              {['Accueil', 'Services', 'Témoignages', 'Offres', 'Contact'].map((item) => (
                 <button 
                   key={item}
-                  onClick={() => scrollToSection(item.toLowerCase().replace('à propos', 'apropos').replace('témoignages', 'portfolio'))} 
+                  onClick={() => scrollToSection(item.toLowerCase().replace('témoignages', 'portfolio').replace('offres', 'offers'))} 
                   className="block px-3 py-2 text-base font-medium text-slate-700 hover:text-blue-600 w-full text-left transition-colors"
                 >
                   {item}
@@ -357,10 +363,10 @@ function App() {
               Témoignages
             </div>
             <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-              Nos clients témoignent
+              Les résultats parlent d'eux-mêmes
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Découvrez comment nous avons transformé la présence digitale de nos clients
+              Des centaines de personnes recherchent vos services chaque jour sur le web, pourquoi laisser cet argent sur la table? Si vous ne les accueillez pas convenablement, vos compétiteurs s'en chargeront.
             </p>
           </div>
           
@@ -471,61 +477,171 @@ function App() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="apropos" className="py-32 bg-white relative overflow-hidden">
+      {/* Offers Section */}
+      <section id="offers" className="py-32 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 to-cyan-50/30"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <div className="animate-fade-in-up">
-              <div className="inline-flex items-center px-4 py-2 bg-blue-100/50 backdrop-blur-sm rounded-full text-blue-700 text-sm font-medium mb-6">
-                <Users className="w-4 h-4 mr-2" />
-                À propos
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center px-4 py-2 bg-blue-100/50 backdrop-blur-sm rounded-full text-blue-700 text-sm font-medium mb-6">
+              <Zap className="w-4 h-4 mr-2" />
+              Nos offres
+            </div>
+            <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+              Choisissez votre formule
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Des solutions adaptées à chaque besoin et budget pour propulser votre présence digitale
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            {/* STARTER Plan */}
+            <div className="bg-white/70 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 transform animate-fade-in-up border border-slate-200/50 hover:border-blue-200">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center px-4 py-2 bg-blue-100/50 rounded-full text-blue-700 text-sm font-medium mb-4">
+                  STARTER
+                </div>
+                <div className="text-4xl font-bold text-slate-900 mb-2">295,03€</div>
+                <p className="text-slate-600 font-medium">Votre vitrine digitale, en ligne en 48h</p>
               </div>
-              <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-                Votre partenaire digital d'excellence
-              </h2>
-              <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                Depuis 2019, nous accompagnons les entreprises ambitieuses dans leur transformation digitale. 
-                Notre expertise combine créativité, innovation et performance pour créer des expériences web exceptionnelles.
+              
+              <ul className="space-y-4 mb-8">
+                {[
+                  "Site web intelligent 1 page de haute qualité",
+                  "Compatible mobile et chargement rapide",
+                  "Formulaire de contact lié à votre email",
+                  "Hébergement + configuration domaine inclus",
+                  "Prêt pour Google (boost SEO de base)"
+                ].map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <p className="text-sm text-slate-600 italic mb-6">
+                Mettez-vous en ligne rapidement. Parfait pour ceux qui ont besoin d'une présence moderne et épurée—sans superflu.
               </p>
               
-              <div className="grid grid-cols-2 gap-8 mb-8">
-                {[
-                  { number: "200+", label: "Projets réalisés", color: "blue" },
-                  { number: "99%", label: "Clients satisfaits", color: "cyan" },
-                  { number: "5", label: "Années d'expertise", color: "blue" },
-                  { number: "24/7", label: "Support premium", color: "cyan" }
-                ].map((stat, index) => (
-                  <div key={stat.label} className="text-center group">
-                    <div className={`text-4xl font-bold bg-gradient-to-r from-${stat.color}-600 to-cyan-500 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform duration-300`}>
-                      {stat.number}
-                    </div>
-                    <div className="text-slate-600 text-sm">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-              
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="group bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 hover:scale-105 transform flex items-center"
-              >
-                Parlons de votre projet
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
+                Choisir STARTER
               </button>
             </div>
-            
-            <div className="relative animate-fade-in-up-delay">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-shadow duration-500">
-                <img 
-                  src="https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=800" 
-                  alt="Notre équipe"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+
+            {/* SMART GROWTH Plan - Featured */}
+            <div className="bg-white/70 backdrop-blur-sm p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 transform animate-fade-in-up border-2 border-blue-300 relative lg:scale-110 lg:z-10">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <div className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-6 py-2 rounded-full text-sm font-bold">
+                  Plus Populaire
+                </div>
               </div>
-              <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-br from-blue-200 to-cyan-200 rounded-full opacity-30 animate-pulse"></div>
-              <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-30 animate-pulse delay-1000"></div>
+              
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-full text-blue-700 text-sm font-medium mb-4">
+                  SMART GROWTH
+                </div>
+                <div className="text-4xl font-bold text-slate-900 mb-2">420,13€</div>
+                <p className="text-slate-600 font-medium">Tout dans Starter + Outils pour attirer et convertir</p>
+              </div>
+              
+              <ul className="space-y-4 mb-8">
+                {[
+                  "Site web multi-sections avec mise en avant des services",
+                  "Alertes de formulaire intelligent envoyées directement sur votre téléphone",
+                  "Chatbot IA : commercial 24/7—réponses instantanées aux prospects",
+                  "6 mois de boost SEO pour apparaître sur Google",
+                  "Intégration des avis Google",
+                  "Prêt pour newsletter pour collecter des emails et revendre à votre base client existante",
+                  "Livré en 48h"
+                ].map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <p className="text-sm text-slate-600 italic mb-6">
+                Plus de visibilité, plus de prospects, plus de crédibilité—tout sans lever le petit doigt. C'est par ça que commencent les professionnels locaux sérieux.
+              </p>
+              
+              <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
+                Choisir SMART GROWTH
+              </button>
+            </div>
+
+            {/* AUTOPILOT Plan */}
+            <div className="bg-white/70 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-105 transform animate-fade-in-up border border-slate-200/50 hover:border-blue-200">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center px-4 py-2 bg-purple-100/50 rounded-full text-purple-700 text-sm font-medium mb-4">
+                  AUTOPILOT
+                </div>
+                <div className="text-4xl font-bold text-slate-900 mb-2">690,36€</div>
+                <p className="text-slate-600 font-medium">Votre site web travaille pour vous 24/7 — et grimpe sur Google</p>
+              </div>
+              
+              <ul className="space-y-4 mb-8">
+                {[
+                  "Tout dans Smart Growth",
+                  "12 mois de SEO continu (optimisation hebdomadaire pour le classement Google)",
+                  "Chatbot IA – répond automatiquement aux prospects 24/7",
+                  "Alertes de prospects envoyées instantanément sur votre téléphone",
+                  "Optimisation du profil Google Business",
+                  "Rédaction d'appels à l'action optimisés pour les conversions",
+                  "\"Booster de prospects chauds\" — popup ou barre d'offre optionnelle pour inciter aux conversions",
+                  "Livraison prioritaire 24–36h"
+                ].map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-slate-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <p className="text-sm text-slate-600 italic mb-6">
+                Vous obtenez les clients. Le site se charge de parler, de se classer et de convertir — sans arrêt.
+              </p>
+              
+              <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25">
+                Choisir AUTOPILOT
+              </button>
+            </div>
+          </div>
+          
+          {/* Discount Section */}
+          <div className="text-center mt-16">
+            <p className="text-sm text-slate-500 italic mb-4">
+              Psst. Cliquez ici pour réclamer une remise de 10% exclusive aux visiteurs de notre site web—valide uniquement en juillet 2025.
+            </p>
+            
+            <div className="inline-block">
+              <button
+                onClick={() => setShowDiscount(!showDiscount)}
+                className="group relative bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-105 transform flex items-center"
+              >
+                <Gift className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                {showDiscount ? 'Masquer la remise' : 'Révéler ma remise exclusive'}
+                <Sparkles className="w-4 h-4 ml-2 animate-pulse" />
+              </button>
+              
+              {showDiscount && (
+                <div className="mt-6 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-2xl animate-fade-in-up">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-yellow-700 mb-2">🎉 Félicitations!</div>
+                    <p className="text-yellow-800 mb-4">Votre code de remise de 10% :</p>
+                    <div className="inline-block bg-white px-6 py-3 rounded-lg border-2 border-dashed border-yellow-400">
+                      <span className="text-2xl font-bold text-yellow-700 tracking-wider">
+                        {generateDiscountCode()}
+                      </span>
+                    </div>
+                    <p className="text-sm text-yellow-700 mt-4 italic">
+                      Utilisez ce code lors de votre commande pour économiser 10% sur n'importe quelle formule!
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
