@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Code, Palette, Zap, Users, Star, Mail, Phone, MapPin, Menu, X, ChevronDown, Globe, Sparkles, TrendingUp, Eye, Clock, Shield, Check, Quote, Gift } from 'lucide-react';
+import { ArrowRight, Code, Palette, Zap, Users, Star, Mail, Phone, MapPin, Menu, X, ChevronDown, Globe, Sparkles, TrendingUp, Eye, Clock, Shield, Check, Quote, Gift, Plus, Minus } from 'lucide-react';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showDiscount, setShowDiscount] = useState(false);
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const [isAtBottom, setIsAtBottom] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      
+      // Check if user is at bottom of page
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setIsAtBottom(scrollTop + windowHeight >= documentHeight - 100);
     };
     
     const handleMouseMove = (e: MouseEvent) => {
@@ -37,6 +45,53 @@ function App() {
     const codes = ['SAVE10WEB', 'DIGITAL10', 'EXCLUSIVE10', 'WEB10OFF', 'SAYCE10'];
     return codes[Math.floor(Math.random() * codes.length)];
   };
+
+  const toggleFAQ = (index: number) => {
+    setOpenFAQ(openFAQ === index ? null : index);
+  };
+
+  const faqData = [
+    {
+      question: "Combien de temps faut-il vraiment pour mettre mon site en ligne ?",
+      answer: "48 heures ou moins. Si vous choisissez le plan Autopilot, nous livrons souvent en 24-36 heures."
+    },
+    {
+      question: "Je ne suis pas doué en technologie — dois-je faire quelque chose moi-même ?",
+      answer: "Non ! Nous gérons tout : domaine, hébergement, design et configuration. Vous n'avez qu'à approuver le résultat final."
+    },
+    {
+      question: "Et si je n'ai pas de photos professionnelles ou de texte ?",
+      answer: "Aucun problème — nous rédigeons un texte persuasif pour vous et pouvons utiliser des images de haute qualité adaptées à votre entreprise."
+    },
+    {
+      question: "Les clients peuvent-ils me contacter directement depuis le site ?",
+      answer: "Oui ! Ils peuvent remplir un formulaire qui vous notifie instantanément par email ou SMS. Aucun prospect manqué."
+    },
+    {
+      question: "Quelle est la différence entre les options à 295$ et 420$ ?",
+      answer: "Le plan à 420$ inclut un chatbot IA, des alertes de prospects sur votre téléphone, et des outils pour être trouvé sur Google — il se rentabilise rapidement."
+    },
+    {
+      question: "Mon site apparaîtra-t-il sur Google ?",
+      answer: "Oui, tous les plans incluent l'optimisation SEO pour vous aider à vous classer. Nos plans supérieurs incluent un travail continu pour grimper encore plus haut."
+    },
+    {
+      question: "Dois-je continuer à payer mensuellement ?",
+      answer: "Aucun frais mensuel sauf si vous choisissez le SEO continu (Autopilot). Sinon, c'est un prix unique."
+    },
+    {
+      question: "Puis-je mettre à jour mon site plus tard si nécessaire ?",
+      answer: "Oui — vous pourrez demander des mises à jour, ou nous pouvons les gérer pour un petit frais selon le changement."
+    },
+    {
+      question: "Comment savoir si cela aidera vraiment mon entreprise ?",
+      answer: "Nos clients rapportent plus de demandes, plus de confiance des clients, et une meilleure visibilité — parce qu'aujourd'hui, les gens cherchent sur Google avant d'appeler."
+    },
+    {
+      question: "J'obtiens déjà du travail par bouche-à-oreille — ai-je vraiment besoin d'un site web ?",
+      answer: "Le bouche-à-oreille c'est génial — mais même les références vous cherchent d'abord sur Google. Et qu'en est-il des gens qui n'ont jamais entendu parler de vous ? Chaque jour, de nouveaux clients potentiels recherchent en ligne exactement ce que vous offrez. Si vous n'êtes pas visible, ils iront voir quelqu'un d'autre. Un excellent site web inspire confiance rapidement et s'assure qu'ils vous choisissent."
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50 overflow-x-hidden">
@@ -68,7 +123,7 @@ function App() {
             
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
-                {['Accueil', 'Services', 'Témoignages', 'Offres'].map((item, index) => (
+                {['Accueil', 'Services', 'Témoignages', 'Offres', 'FAQ'].map((item, index) => (
                   <button 
                     key={item}
                     onClick={() => scrollToSection(item.toLowerCase().replace('témoignages', 'portfolio').replace('offres', 'offers'))} 
@@ -79,12 +134,6 @@ function App() {
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-500 group-hover:w-full transition-all duration-300"></span>
                   </button>
                 ))}
-                <button 
-                  onClick={() => scrollToSection('contact')} 
-                  className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105 transform"
-                >
-                  Contact
-                </button>
               </div>
             </div>
             
@@ -103,7 +152,7 @@ function App() {
         <div className={`md:hidden transition-all duration-300 ${isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} overflow-hidden`}>
           <div className="bg-white/95 backdrop-blur-xl border-t border-slate-200/50">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {['Accueil', 'Services', 'Témoignages', 'Offres', 'Contact'].map((item) => (
+              {['Accueil', 'Services', 'Témoignages', 'Offres', 'FAQ'].map((item) => (
                 <button 
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase().replace('témoignages', 'portfolio').replace('offres', 'offers'))} 
@@ -168,7 +217,7 @@ function App() {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center opacity-0 animate-fade-in-up-delay-2">
               <button 
-                onClick={() => scrollToSection('contact')}
+                onClick={() => scrollToSection('faq')}
                 className="group bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 hover:scale-105 transform flex items-center"
               >
                 Démarrer mon projet
@@ -502,7 +551,7 @@ function App() {
                 <div className="inline-flex items-center px-4 py-2 bg-blue-100/50 rounded-full text-blue-700 text-sm font-medium mb-4">
                   STARTER
                 </div>
-                <div className="text-4xl font-bold text-slate-900 mb-2">295,03€</div>
+                <div className="text-4xl font-bold text-slate-900 mb-2">$295</div>
                 <p className="text-slate-600 font-medium">Votre vitrine digitale, en ligne en 48h</p>
               </div>
               
@@ -542,7 +591,7 @@ function App() {
                 <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-full text-blue-700 text-sm font-medium mb-4">
                   SMART GROWTH
                 </div>
-                <div className="text-4xl font-bold text-slate-900 mb-2">420,13€</div>
+                <div className="text-4xl font-bold text-slate-900 mb-2">$420</div>
                 <p className="text-slate-600 font-medium">Tout dans Starter + Outils pour attirer et convertir</p>
               </div>
               
@@ -578,7 +627,7 @@ function App() {
                 <div className="inline-flex items-center px-4 py-2 bg-purple-100/50 rounded-full text-purple-700 text-sm font-medium mb-4">
                   AUTOPILOT
                 </div>
-                <div className="text-4xl font-bold text-slate-900 mb-2">690,36€</div>
+                <div className="text-4xl font-bold text-slate-900 mb-2">$690</div>
                 <p className="text-slate-600 font-medium">Votre site web travaille pour vous 24/7 — et grimpe sur Google</p>
               </div>
               
@@ -647,179 +696,114 @@ function App() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-32 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
+      {/* FAQ Section */}
+      <section id="faq" className="py-32 bg-slate-50 relative overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-40 h-40 bg-blue-500/10 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-60 h-60 bg-cyan-500/10 rounded-full animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-600/5 rounded-full animate-pulse delay-500"></div>
+          <div className="absolute top-20 left-20 w-40 h-40 bg-gradient-to-br from-blue-200 to-cyan-200 rounded-full opacity-10 animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-60 h-60 bg-gradient-to-br from-cyan-200 to-blue-200 rounded-full opacity-10 animate-pulse delay-1000"></div>
         </div>
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center px-4 py-2 bg-blue-500/20 backdrop-blur-sm rounded-full text-cyan-300 text-sm font-medium mb-6">
-              <Mail className="w-4 h-4 mr-2" />
-              Contact
+            <div className="inline-flex items-center px-4 py-2 bg-blue-100/50 backdrop-blur-sm rounded-full text-blue-700 text-sm font-medium mb-6">
+              <Users className="w-4 h-4 mr-2" />
+              FAQ
             </div>
-            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Démarrons votre projet
+            <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
+              Vous avez des questions, nous avons des réponses directes
             </h2>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-              Prêt à transformer votre présence digitale ? Contactez-nous pour un devis gratuit et personnalisé.
+          </div>
+          
+          <div className="space-y-4">
+            {faqData.map((faq, index) => (
+              <div 
+                key={index}
+                className="bg-white/70 backdrop-blur-sm rounded-2xl border border-slate-200/50 hover:border-blue-200 transition-all duration-300 animate-fade-in-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-blue-50/30 transition-all duration-300 rounded-2xl group"
+                >
+                  <h3 className="text-lg font-semibold text-slate-900 group-hover:text-blue-600 transition-colors pr-4">
+                    {faq.question}
+                  </h3>
+                  <div className="flex-shrink-0">
+                    {openFAQ === index ? (
+                      <Minus className="h-6 w-6 text-blue-600 group-hover:scale-110 transition-transform duration-300" />
+                    ) : (
+                      <Plus className="h-6 w-6 text-slate-400 group-hover:text-blue-600 group-hover:scale-110 transition-all duration-300" />
+                    )}
+                  </div>
+                </button>
+                
+                <div className={`overflow-hidden transition-all duration-500 ${
+                  openFAQ === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                }`}>
+                  <div className="px-8 pb-6">
+                    <p className="text-slate-600 leading-relaxed">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 bg-white relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+            De nouveaux clients recherchent{' '}
+            <span className="relative inline-block">
+              <span className="text-blue-600 animate-pulse">aujourd'hui</span>
+              <div className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full animate-pulse"></div>
+            </span>
+            {' '}— ne les laissez pas trouver vos concurrents à la place.
+          </h2>
+          <p className="text-xl text-slate-600 mb-8">
+            Réservez votre appel maintenant.
+          </p>
+        </div>
+      </section>
+
+      {/* Calendar Section */}
+      <section className="py-16 bg-slate-50 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center mb-8">
+            <p className="text-lg text-slate-600 italic">
+              Nous sommes disponibles chaque jour de 9:00 am à 5:00 pm! Au plaisir de vous rencontrer :)
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <div className="animate-fade-in-up">
-              <h3 className="text-3xl font-bold text-white mb-8">Discutons de vos ambitions</h3>
-              
-              <div className="space-y-6">
-                {[
-                  { icon: Mail, title: "Email", info: "hello@saycedigital.fr", color: "blue" },
-                  { icon: Phone, title: "Téléphone", info: "+33 1 23 45 67 89", color: "cyan" },
-                  { icon: MapPin, title: "Adresse", info: "123 Avenue des Champs-Élysées\n75008 Paris, France", color: "blue" }
-                ].map((contact, index) => (
-                  <div key={contact.title} className="flex items-start group">
-                    <div className={`w-12 h-12 bg-gradient-to-br from-${contact.color}-500 to-cyan-500 rounded-2xl flex items-center justify-center mr-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                      <contact.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-white font-semibold mb-1">{contact.title}</p>
-                      <p className="text-slate-300 whitespace-pre-line">{contact.info}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-12">
-                <p className="text-slate-300 mb-4">Suivez-nous</p>
-                <div className="flex space-x-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="w-12 h-12 bg-slate-800/50 hover:bg-gradient-to-br hover:from-blue-600 hover:to-cyan-500 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 hover:rotate-3 backdrop-blur-sm">
-                      <div className="w-5 h-5 bg-slate-400 rounded-sm"></div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 animate-fade-in-up-delay">
-              <h3 className="text-2xl font-bold text-white mb-6">Demandez votre devis gratuit</h3>
-              
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Prénom</label>
-                    <input 
-                      type="text" 
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all backdrop-blur-sm"
-                      placeholder="Votre prénom"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-300 mb-2">Nom</label>
-                    <input 
-                      type="text" 
-                      className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all backdrop-blur-sm"
-                      placeholder="Votre nom"
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
-                  <input 
-                    type="email" 
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all backdrop-blur-sm"
-                    placeholder="votre@email.com"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Type de projet</label>
-                  <select className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all backdrop-blur-sm">
-                    <option className="bg-slate-800">Site vitrine</option>
-                    <option className="bg-slate-800">E-commerce</option>
-                    <option className="bg-slate-800">Application web</option>
-                    <option className="bg-slate-800">Refonte de site</option>
-                    <option className="bg-slate-800">Autre</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Message</label>
-                  <textarea 
-                    rows={4}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all backdrop-blur-sm resize-none"
-                    placeholder="Décrivez votre projet..."
-                  ></textarea>
-                </div>
-                
-                <button 
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 hover:scale-105 transform"
-                >
-                  Envoyer ma demande
-                </button>
-              </form>
-            </div>
+          <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+            <div className="calendly-inline-widget" data-url="https://calendly.com/madamechenouf-saycedigi" style={{minWidth:'320px', height:'700px'}}></div>
+            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
           </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="bg-black text-white py-16 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-10 left-10 w-20 h-20 bg-blue-500/5 rounded-full animate-pulse"></div>
-          <div className="absolute bottom-10 right-10 w-32 h-32 bg-cyan-500/5 rounded-full animate-pulse delay-1000"></div>
-        </div>
-        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center mb-6 group">
-                <Globe className="h-10 w-10 text-cyan-400 group-hover:rotate-12 transition-transform duration-300" />
-                <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                  Sayce Digital
-                </span>
-              </div>
-              <p className="text-slate-400 mb-8 max-w-md leading-relaxed">
-                Votre agence digitale d'excellence pour créer des expériences web exceptionnelles 
-                qui transforment vos visiteurs en clients fidèles.
-              </p>
-              <div className="flex space-x-4">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="w-12 h-12 bg-slate-800 hover:bg-gradient-to-br hover:from-blue-600 hover:to-cyan-500 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 hover:rotate-3">
-                    <div className="w-5 h-5 bg-slate-400 rounded-sm"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-6 text-white">Services</h4>
-              <ul className="space-y-3">
-                {['Développement Web', 'Design UI/UX', 'E-commerce', 'Optimisation SEO'].map((service) => (
-                  <li key={service}>
-                    <a href="#" className="text-slate-400 hover:text-cyan-400 transition-colors duration-300 hover:translate-x-1 transform inline-block">
-                      {service}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-6 text-white">Contact</h4>
-              <ul className="space-y-3 text-slate-400">
-                <li>+33 1 23 45 67 89</li>
-                <li>hello@saycedigital.fr</li>
-                <li className="leading-relaxed">123 Avenue des Champs-Élysées<br />75008 Paris, France</li>
-              </ul>
+          <div className="flex justify-between items-center">
+            <div className={`flex items-center group transition-all duration-500 ${
+              isAtBottom ? 'animate-bounce-subtle' : ''
+            }`}>
+              <Globe className={`h-10 w-10 text-cyan-400 transition-transform duration-500 ${
+                isAtBottom ? 'rotate-12 scale-110' : ''
+              }`} />
+              <span className={`ml-3 text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent transition-all duration-500 ${
+                isAtBottom ? 'scale-110' : ''
+              }`}>
+                Sayce Digital
+              </span>
             </div>
           </div>
           
-          <div className="border-t border-slate-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <div className="border-t border-slate-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p className="text-slate-400">© 2024 Sayce Digital. Tous droits réservés.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               {['Mentions légales', 'Politique de confidentialité', 'CGV'].map((link) => (
