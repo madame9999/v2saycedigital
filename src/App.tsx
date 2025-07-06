@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Code, Palette, Zap, Users, Star, Mail, Phone, MapPin, Menu, X, ChevronDown, Globe, Sparkles, TrendingUp, Eye, Clock, Shield, Check, Quote, Gift, Plus, Minus } from 'lucide-react';
+import { ArrowRight, Code, Palette, Zap, Users, Star, Mail, Phone, MapPin, Menu, X, ChevronDown, Globe, Sparkles, TrendingUp, Eye, Clock, Shield, Check, Quote, Gift, Plus, Minus, ArrowDown } from 'lucide-react';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showDiscount, setShowDiscount] = useState(false);
+  const [discountCode, setDiscountCode] = useState('');
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
   const [isAtBottom, setIsAtBottom] = useState(false);
 
@@ -46,14 +47,26 @@ function App() {
     return codes[Math.floor(Math.random() * codes.length)];
   };
 
+  const handleDiscountReveal = () => {
+    if (!showDiscount) {
+      // Generate code only when first revealing
+      setDiscountCode(generateDiscountCode());
+    }
+    setShowDiscount(!showDiscount);
+  };
+
   const toggleFAQ = (index: number) => {
     setOpenFAQ(openFAQ === index ? null : index);
+  };
+
+  const handleOfferSelection = () => {
+    scrollToSection('calendar');
   };
 
   const faqData = [
     {
       question: "Combien de temps faut-il vraiment pour mettre mon site en ligne ?",
-      answer: "48 heures ou moins. Si vous choisissez le plan Autopilot, nous livrons souvent en 24-36 heures."
+      answer: "48 heures ou moins—si vous choisissez le plan Autopilot, vous serez prioritaire. Puis si un événement inattendu nous empêche de remplir notre promesse, nous remboursons 50% de la somme totale du plan sélectionné. Évidemment, nous vous rembourserons entièrement si vous souhaitez clore le partenariat."
     },
     {
       question: "Je ne suis pas doué en technologie — dois-je faire quelque chose moi-même ?",
@@ -77,7 +90,7 @@ function App() {
     },
     {
       question: "Dois-je continuer à payer mensuellement ?",
-      answer: "Aucun frais mensuel sauf si vous choisissez le SEO continu (Autopilot). Sinon, c'est un prix unique."
+      answer: "Aucun frais mensuel sauf si vous choisissez le plan Autopilot qui offre 12 mois de SEO continu—les 6 premiers mois sont payants (109.23$/mois), puis les 6 derniers sont offerts. Sinon, c'est un prix unique."
     },
     {
       question: "Puis-je mettre à jour mon site plus tard si nécessaire ?",
@@ -212,7 +225,7 @@ function App() {
             </p>
             
             <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-4xl mx-auto leading-relaxed opacity-0 animate-fade-in-up-delay">
-              Ne négligez pas le traffic en ligne!
+              Ne négligez pas le trafic en ligne!
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center opacity-0 animate-fade-in-up-delay-2">
@@ -364,8 +377,8 @@ function App() {
                 delay: "400ms"
               },
               {
-                title: "Apparence professionnelle, fonctionne comme une machine",
-                description: "Design élégant qui inspire confiance et génère de l'action, même pendant que vous dormez.",
+                title: "Une présence en ligne qui vend non-stop — à un prix qui fait sourire.",
+                description: "Ayez une présence qui génère des clients pour vous de Lundi à Dimanche—Janvier à Décembre, sans pour autant vous soucier d'un salaire à verser ;)",
                 delay: "600ms"
               },
               {
@@ -574,7 +587,10 @@ function App() {
                 Mettez-vous en ligne rapidement. Parfait pour ceux qui ont besoin d'une présence moderne et épurée—sans superflu.
               </p>
               
-              <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
+              <button 
+                onClick={handleOfferSelection}
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25"
+              >
                 Choisir STARTER
               </button>
             </div>
@@ -602,7 +618,7 @@ function App() {
                   "Chatbot IA : commercial 24/7—réponses instantanées aux prospects",
                   "6 mois de boost SEO pour apparaître sur Google",
                   "Intégration des avis Google",
-                  "Prêt pour newsletter pour collecter des emails et revendre à votre base client existante",
+                  "Newsletter pour relancer vos clients par email",
                   "Livré en 48h"
                 ].map((feature, index) => (
                   <li key={index} className="flex items-start">
@@ -616,7 +632,10 @@ function App() {
                 Plus de visibilité, plus de prospects, plus de crédibilité—tout sans lever le petit doigt. C'est par ça que commencent les professionnels locaux sérieux.
               </p>
               
-              <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
+              <button 
+                onClick={handleOfferSelection}
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25"
+              >
                 Choisir SMART GROWTH
               </button>
             </div>
@@ -635,12 +654,9 @@ function App() {
                 {[
                   "Tout dans Smart Growth",
                   "12 mois de SEO continu (optimisation hebdomadaire pour le classement Google)",
-                  "Chatbot IA – répond automatiquement aux prospects 24/7",
-                  "Alertes de prospects envoyées instantanément sur votre téléphone",
                   "Optimisation du profil Google Business",
-                  "Rédaction d'appels à l'action optimisés pour les conversions",
                   "\"Booster de prospects chauds\" — popup ou barre d'offre optionnelle pour inciter aux conversions",
-                  "Livraison prioritaire 24–36h"
+                  "Livraison prioritaire"
                 ].map((feature, index) => (
                   <li key={index} className="flex items-start">
                     <Check className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
@@ -653,7 +669,10 @@ function App() {
                 Vous obtenez les clients. Le site se charge de parler, de se classer et de convertir — sans arrêt.
               </p>
               
-              <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25">
+              <button 
+                onClick={handleOfferSelection}
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25"
+              >
                 Choisir AUTOPILOT
               </button>
             </div>
@@ -667,7 +686,7 @@ function App() {
             
             <div className="inline-block">
               <button
-                onClick={() => setShowDiscount(!showDiscount)}
+                onClick={handleDiscountReveal}
                 className="group relative bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/25 hover:scale-105 transform flex items-center"
               >
                 <Gift className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
@@ -682,7 +701,7 @@ function App() {
                     <p className="text-yellow-800 mb-4">Votre code de remise de 10% :</p>
                     <div className="inline-block bg-white px-6 py-3 rounded-lg border-2 border-dashed border-yellow-400">
                       <span className="text-2xl font-bold text-yellow-700 tracking-wider">
-                        {generateDiscountCode()}
+                        {discountCode}
                       </span>
                     </div>
                     <p className="text-sm text-yellow-700 mt-4 italic">
@@ -710,7 +729,7 @@ function App() {
               FAQ
             </div>
             <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-              Vous avez des questions, nous avons des réponses directes
+              Vous avez des questions, nous avons des réponses
             </h2>
           </div>
           
@@ -756,7 +775,7 @@ function App() {
       <section className="py-16 bg-white relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            De nouveaux clients recherchent{' '}
+            De nouveaux clients vous recherchent{' '}
             <span className="relative inline-block">
               <span className="text-blue-600 animate-pulse">aujourd'hui</span>
               <div className="absolute -bottom-1 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full animate-pulse"></div>
@@ -764,13 +783,20 @@ function App() {
             {' '}— ne les laissez pas trouver vos concurrents à la place.
           </h2>
           <p className="text-xl text-slate-600 mb-8">
-            Réservez votre appel maintenant.
+            Investissez 10 minutes, récoltez 10 fois plus
           </p>
+          
+          {/* Animated Arrow */}
+          <div className="flex justify-center mb-8">
+            <div className="animate-bounce">
+              <ArrowDown className="h-8 w-8 text-blue-600" />
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Calendar Section */}
-      <section className="py-16 bg-slate-50 relative overflow-hidden">
+      <section id="calendar" className="py-16 bg-slate-50 relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center mb-8">
             <p className="text-lg text-slate-600 italic">
@@ -780,7 +806,6 @@ function App() {
           
           <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
             <div className="calendly-inline-widget" data-url="https://calendly.com/madamechenouf-saycedigi" style={{minWidth:'320px', height:'700px'}}></div>
-            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
           </div>
         </div>
       </section>
@@ -815,6 +840,9 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Calendly Script */}
+      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
       <style jsx>{`
         @keyframes gradient-x {
