@@ -106,6 +106,21 @@ function App() {
     }
   ];
 
+  useEffect(() => {
+    // Load Calendly script
+    const script = document.createElement('script');
+    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup script on unmount
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 overflow-x-hidden">
       {/* Cursor follower */}
@@ -230,7 +245,7 @@ function App() {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center opacity-0 animate-fade-in-up-delay-2">
               <button 
-                onClick={() => scrollToSection('faq')}
+                onClick={() => scrollToSection('offers')}
                 className="group bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 hover:scale-105 transform flex items-center"
               >
                 Démarrer mon projet
@@ -240,7 +255,7 @@ function App() {
                 onClick={() => scrollToSection('portfolio')}
                 className="group text-slate-700 hover:text-blue-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 border-2 border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 flex items-center backdrop-blur-sm"
               >
-                Voir nos créations
+                Voir témoignages
                 <ChevronDown className="ml-2 h-5 w-5 group-hover:translate-y-1 transition-transform" />
               </button>
             </div>
@@ -792,21 +807,19 @@ function App() {
               <ArrowDown className="h-8 w-8 text-blue-600" />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Calendar Section */}
-      <section id="calendar" className="py-16 bg-slate-50 relative overflow-hidden">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="text-center mb-8">
-            <p className="text-lg text-slate-600 italic">
-              Nous sommes disponibles chaque jour de 9:00 am à 5:00 pm! Au plaisir de vous rencontrer :)
-            </p>
-          </div>
           
-          <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-            <div className="calendly-inline-widget" data-url="https://calendly.com/madamechenouf-saycedigi" style={{minWidth:'320px', height:'700px'}}></div>
-          </div>
+          {/* Calendar Section */}
+          <section id="calendar" className="relative">
+            <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+              <div className="calendly-inline-widget" data-url="https://calendly.com/madamechenouf-saycedigi" style={{minWidth:'320px', height:'700px'}}></div>
+            </div>
+            
+            <div className="text-center mt-8">
+              <p className="text-lg text-slate-600 italic">
+                Nous sommes disponibles chaque jour de 9:00 am à 5:00 pm! Au plaisir de vous rencontrer :)
+              </p>
+            </div>
+          </section>
         </div>
       </section>
 
@@ -840,9 +853,6 @@ function App() {
           </div>
         </div>
       </footer>
-
-      {/* Calendly Script */}
-      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
       <style jsx>{`
         @keyframes gradient-x {
