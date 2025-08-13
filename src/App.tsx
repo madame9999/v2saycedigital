@@ -696,7 +696,7 @@ function App() {
           {/* Discount Section */}
           <div className="text-center mt-16">
             <p className="text-sm text-slate-500 italic mb-4">
-              Psst. Cliquez ici pour réclamer une remise de 10% exclusive aux visiteurs de notre site web—valide uniquement en juillet 2025.
+              Psst. Cliquez ici pour réclamer une remise de 10% exclusive aux visiteurs de notre site web—valide uniquement en août 2025.
             </p>
             
             <div className="inline-block">
